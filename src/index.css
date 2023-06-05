@@ -1,0 +1,23 @@
+body {
+  min-height: 100vh;
+}
+nav {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: antiquewhite;
+  min-height: 10vh;
+}
+ul {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  list-style: none;
+}
+li {
+  cursor: pointer;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
