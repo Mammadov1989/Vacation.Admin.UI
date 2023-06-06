@@ -28,7 +28,6 @@ export default {
         .then((res) => res.data);
     },
     signin: async (data) => {
-      console.log("URL", `${BASE_URL}/api/account/auth`);
       return await axios.post(`${BASE_URL}/api/account/auth`, data);
     },
     signout: async () => {
@@ -58,6 +57,32 @@ export default {
     put: async (requestData) => {
       return await axios
         .put(`${BASE_URL}/api/Department`, requestData, options())
+        .then((res) => res.data);
+    },
+  },
+  vacationRequest: {
+    getAll: async () => {
+      return await axios
+        .get(`${BASE_URL}/api/VacationRequest/GetAll`, options())
+        .then((res) => res.data);
+    },
+    post: async (requestData) => {
+      return await axios
+        .post(`${BASE_URL}/api/VacationRequest`, requestData, options())
+        .then((res) => res.data);
+    },
+  },
+  employee: {
+    getAll: async () => {
+      return await axios
+        .get(`${BASE_URL}/api/Employee/GetAll`, options())
+        .then((res) => res.data);
+    },
+  },
+  vacationDay: {
+    getAll: async () => {
+      return await axios
+        .get(`${BASE_URL}/api/VacationDay/GetAll`, options())
         .then((res) => res.data);
     },
   },

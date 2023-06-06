@@ -13,9 +13,7 @@ export default function Department() {
     let data = await api.department.getAllDepartments();
     setData(data);
   };
-  useEffect(() => {
-    console.log(inputValue, "input value");
-  }, [inputValue]);
+  useEffect(() => {}, [inputValue]);
   const sendData = async () => {
     if (inputValue.id) {
       await api.department.put(inputValue);
@@ -24,13 +22,13 @@ export default function Department() {
     }
     getData();
   };
+
   const resetInput = () => {
     setInputValue({ shortName: "", fullName: "", notes: "" });
   };
   return (
     <>
-      <h1>Salam</h1>
-      <div style={{ marginBottom: "50px" }}>
+      <div style={{ marginBottom: "50px", marginTop: "40px" }}>
         <label style={{ marginRight: "20px" }}>
           Qisa ad :
           <input
@@ -81,7 +79,7 @@ export default function Department() {
             <th>Qeyd</th>
           </tr>
 
-          {data.map((e) => {
+          {data?.map((e) => {
             return (
               <tr onDoubleClick={(p) => setInputValue(e)}>
                 <td>{e.shortName}</td>
