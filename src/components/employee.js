@@ -3,21 +3,27 @@ import api from "../api/api";
 import styled from "styled-components";
 import Select from "react-select";
 
-export default function Position() {
+export default function Employee() {
   const [data, setData] = useState([]);
   const [inputValue, setInputValue] = useState({});
   const [selectedOption, setSelectedOption] = useState({
     value: "",
     label: "",
   });
-  const [departmentData, setDepartmentData] = useState();
+  const [selectedPosition, setSelectedPosition] = useState({
+    value: "",
+    label: "",
+  });
+  const [departmentData, setDepartmentData] = useState([]);
+  const [positionData, setPositionData] = useState([]);
   const ref = useRef(null);
   useEffect(() => {
     getData();
     allDepartment();
+    allPosition();
   }, []);
   const getData = async () => {
-    let data = await api.position.getAll();
+    let data = await api.employee.getAll();
     setData(data);
   };
   useEffect(() => {}, [inputValue]);
@@ -40,20 +46,42 @@ export default function Position() {
     setInputValue({ ...inputValue, departmentId: event.value });
   };
 
+  const handleChangePsotion = (event) => {
+    setSelectedPosition({
+      ...selectedPosition,
+      value: event.value,
+      label: event.label,
+    });
+    setInputValue({ ...inputValue, positionId: event.value });
+  };
+
   let allDepartment = async () => {
     let data = await api.department.getAllDepartments();
     setDepartmentData(data);
   };
 
+  const allPosition = async () => {
+    let data = await api.position.getAll();
+    setPositionData(data);
+  };
+
   const resetInput = () => {
     setInputValue({ name: "", departmentData: "", departmentId: "" });
     setSelectedOption({ value: "", label: "" });
+    setSelectedPosition({ value: "", label: "" });
   };
 
-  const translatedActive = departmentData?.map((x) => {
+  const departmentActive = departmentData?.map((x) => {
     return {
       value: x.id,
       label: x.shortName,
+    };
+  });
+
+  const positionOptions = positionData?.map((x) => {
+    return {
+      value: x.id,
+      label: x.name,
     };
   });
 
@@ -79,10 +107,11 @@ export default function Position() {
           marginTop: "40px",
           display: "flex",
           maxHeight: "20px",
+          alignItems: "center",
         }}
       >
         <label style={{ marginRight: "20px" }}>
-          Vezife :
+          Ad :
           <input
             ref={ref}
             type="text"
@@ -92,20 +121,60 @@ export default function Position() {
             }
           />
         </label>
+        <label style={{ marginRight: "20px" }}>
+          Soyad :
+          <input
+            ref={ref}
+            type="text"
+            value={inputValue?.surName}
+            onChange={(e) =>
+              setInputValue({ ...inputValue, surName: e.target.value })
+            }
+          />
+        </label>
         <label
           style={{
             marginRight: "20px",
             display: "flex",
             alignItems: "center",
-            marginBottom: "30px",
+            marginBottom: "20px",
+            height: "15px !important",
           }}
         >
-          <span>Department : </span>
+          <span>Şöbə : </span>
           <Select
             isSearchable={false}
             value={selectedOption}
             onChange={handleChange}
-            options={translatedActive}
+            options={departmentActive}
+            styles={{
+              container: (provided, state) => ({
+                ...provided,
+                position: "relative",
+              }),
+              control: (provided, state) => ({
+                ...provided,
+                border: "1px solid blue",
+                width: 200,
+              }),
+            }}
+          />
+        </label>
+        <label
+          style={{
+            marginRight: "20px",
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "20px",
+            height: "15px !important",
+          }}
+        >
+          <span>Vəzifə : </span>
+          <Select
+            isSearchable={false}
+            value={selectedPosition}
+            onChange={handleChangePsotion}
+            options={positionOptions}
             styles={{
               container: (provided, state) => ({
                 ...provided,
@@ -131,9 +200,11 @@ export default function Position() {
       <Table>
         <table>
           <tr>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Email</th>
             <th>Vezife</th>
-            <th>Yaradilma Tarixi</th>
-            <th>Department</th>
+            <th>Şöbə</th>
             <th>Sil</th>
           </tr>
 
@@ -150,7 +221,9 @@ export default function Position() {
                 }}
               >
                 <td>{e.name}</td>
-                <td>{e.createdDate}</td>
+                <td>{e.surName}</td>
+                <td>{e.email}</td>
+                <td>{e.positionName}</td>
                 <td>{e.departmentName}</td>
                 <td>
                   <button

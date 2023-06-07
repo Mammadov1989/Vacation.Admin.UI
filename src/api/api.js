@@ -41,6 +41,12 @@ export default {
         },
       });
     },
+
+    getallUser: async () => {
+      return await axios
+        .get(`${BASE_URL}/api/account/GetAllUsers`, options())
+        .then((res) => res.data);
+    },
   },
 
   department: {
@@ -60,6 +66,29 @@ export default {
         .then((res) => res.data);
     },
   },
+
+  position: {
+    getAll: async () => {
+      return await axios
+        .get(`${BASE_URL}/api/Position/GetAll`, options())
+        .then((res) => res.data);
+    },
+    post: async (requestData) => {
+      return await axios
+        .post(`${BASE_URL}/api/Position`, requestData, options())
+        .then((res) => res.data);
+    },
+    put: async (requestData) => {
+      return await axios
+        .put(`${BASE_URL}/api/Position`, requestData, options())
+        .then((res) => res.data);
+    },
+    delete: async (id) => {
+      return await axios
+        .delete(`${BASE_URL}/api/Position?id=${id}`, options())
+        .then((res) => res.data);
+    },
+  },
   vacationRequest: {
     getAll: async () => {
       return await axios
@@ -76,6 +105,21 @@ export default {
     getAll: async () => {
       return await axios
         .get(`${BASE_URL}/api/Employee/GetAll`, options())
+        .then((res) => res.data);
+    },
+    post: async (requestData) => {
+      return await axios
+        .post(`${BASE_URL}/api/Employee`, requestData, options())
+        .then((res) => res.data);
+    },
+    put: async (requestData) => {
+      return await axios
+        .put(`${BASE_URL}/api/Employee`, requestData, options())
+        .then((res) => res.data);
+    },
+    delete: async (id) => {
+      return await axios
+        .delete(`${BASE_URL}/api/Employee?id=${id}`, options())
         .then((res) => res.data);
     },
   },

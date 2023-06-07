@@ -8,9 +8,7 @@ export default function Navbar() {
   let navigate = useNavigate();
   const getLogin = () => {
     navigate("/");
-
     cookie.remove("userId");
-    // window.location.href("https://localhost:3000");
     window.location.reload(false);
   };
   return (
@@ -27,6 +25,9 @@ export default function Navbar() {
           </li>
           <li>
             <Link to="/position">Position</Link>
+          </li>
+          <li>
+            <Link to="/employee">Employee</Link>
           </li>
           <li>
             <Link to="/vacationRequest">VacationRequest</Link>

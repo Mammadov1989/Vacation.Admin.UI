@@ -12,6 +12,7 @@ import Department from "./components/department";
 import Navbar from "./Navbar";
 import Position from "./components/position";
 import VacationRequest from "./components/vacationRequest";
+import Employee from "./components/employee";
 import Login from "./components/login";
 import cookie from "js-cookie";
 function App() {
@@ -26,6 +27,7 @@ function App() {
             <Route path="/department" element={<Department />} />
             <Route path="/position" element={<Position />} />
             <Route path="/vacationRequest" element={<VacationRequest />} />
+            <Route path="/employee" element={<Employee />} />
           </Routes>
         </>
       ) : (
