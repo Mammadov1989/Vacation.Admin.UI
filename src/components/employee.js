@@ -14,13 +14,19 @@ export default function Employee() {
     value: "",
     label: "",
   });
+  const [selectedUser, setSelectedUser] = useState({
+    value: "",
+    label: "",
+  });
   const [departmentData, setDepartmentData] = useState([]);
   const [positionData, setPositionData] = useState([]);
+  const [userData, setUserData] = useState([]);
   const ref = useRef(null);
   useEffect(() => {
     getData();
     allDepartment();
     allPosition();
+    allUser();
   }, []);
   const getData = async () => {
     let data = await api.employee.getAll();
@@ -30,9 +36,9 @@ export default function Employee() {
 
   const sendData = async () => {
     if (inputValue.id) {
-      await api.position.put(inputValue);
+      await api.employee.put(inputValue);
     } else {
-      await api.position.post(inputValue);
+      await api.employee.post(inputValue);
     }
     getData();
   };
@@ -55,6 +61,15 @@ export default function Employee() {
     setInputValue({ ...inputValue, positionId: event.value });
   };
 
+  const handleChangeUser = (event) => {
+    setSelectedUser({
+      ...selectedPosition,
+      value: event.value,
+      label: event.label,
+    });
+    setInputValue({ ...inputValue, userId: event.value });
+  };
+
   let allDepartment = async () => {
     let data = await api.department.getAllDepartments();
     setDepartmentData(data);
@@ -65,10 +80,16 @@ export default function Employee() {
     setPositionData(data);
   };
 
+  const allUser = async () => {
+    let data = await api.auth.getallUser();
+    setUserData(data);
+  };
+
   const resetInput = () => {
     setInputValue({ name: "", departmentData: "", departmentId: "" });
     setSelectedOption({ value: "", label: "" });
     setSelectedPosition({ value: "", label: "" });
+    setSelectedUser({ value: "", label: "" });
   };
 
   const departmentActive = departmentData?.map((x) => {
@@ -85,13 +106,20 @@ export default function Employee() {
     };
   });
 
+  const userOptions = userData?.map((x) => {
+    return {
+      value: x.id,
+      label: x.userName,
+    };
+  });
+
   const deleteRow = async (idFoto) => {
     let datas = data?.filter((prev) => {
       return prev.id !== idFoto;
     });
     setData(datas);
     if (datas?.length > 0) {
-      await api.position.delete(idFoto);
+      await api.employee.delete(idFoto);
     }
   };
 
@@ -105,96 +133,151 @@ export default function Employee() {
         style={{
           marginBottom: "50px",
           marginTop: "40px",
-          display: "flex",
-          maxHeight: "20px",
           alignItems: "center",
         }}
       >
-        <label style={{ marginRight: "20px" }}>
-          Ad :
-          <input
-            ref={ref}
-            type="text"
-            value={inputValue?.name}
-            onChange={(e) =>
-              setInputValue({ ...inputValue, name: e.target.value })
-            }
-          />
-        </label>
-        <label style={{ marginRight: "20px" }}>
-          Soyad :
-          <input
-            ref={ref}
-            type="text"
-            value={inputValue?.surName}
-            onChange={(e) =>
-              setInputValue({ ...inputValue, surName: e.target.value })
-            }
-          />
-        </label>
-        <label
-          style={{
-            marginRight: "20px",
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "20px",
-            height: "15px !important",
-          }}
-        >
-          <span>Şöbə : </span>
-          <Select
-            isSearchable={false}
-            value={selectedOption}
-            onChange={handleChange}
-            options={departmentActive}
-            styles={{
-              container: (provided, state) => ({
-                ...provided,
-                position: "relative",
-              }),
-              control: (provided, state) => ({
-                ...provided,
-                border: "1px solid blue",
-                width: 200,
-              }),
+        <div style={{ display: "flex" }}>
+          <label style={{ marginRight: "20px" }}>
+            Ad :
+            <input
+              ref={ref}
+              type="text"
+              value={inputValue?.name}
+              onChange={(e) =>
+                setInputValue({ ...inputValue, name: e.target.value })
+              }
+            />
+          </label>
+          <label style={{ marginRight: "20px" }}>
+            Soyad :
+            <input
+              ref={ref}
+              type="text"
+              value={inputValue?.surName}
+              onChange={(e) =>
+                setInputValue({ ...inputValue, surName: e.target.value })
+              }
+            />
+          </label>
+          <label style={{ marginRight: "20px" }}>
+            Email :
+            <input
+              ref={ref}
+              type="text"
+              value={inputValue?.email}
+              onChange={(e) =>
+                setInputValue({ ...inputValue, email: e.target.value })
+              }
+            />
+          </label>
+          <label
+            style={{
+              marginRight: "20px",
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "20px",
+              height: "15px !important",
             }}
-          />
-        </label>
-        <label
-          style={{
-            marginRight: "20px",
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "20px",
-            height: "15px !important",
-          }}
-        >
-          <span>Vəzifə : </span>
-          <Select
-            isSearchable={false}
-            value={selectedPosition}
-            onChange={handleChangePsotion}
-            options={positionOptions}
-            styles={{
-              container: (provided, state) => ({
-                ...provided,
-                position: "relative",
-              }),
-              control: (provided, state) => ({
-                ...provided,
-                border: "1px solid blue",
-                width: 200,
-              }),
+          >
+            <span>Şöbə : </span>
+            <Select
+              isSearchable={false}
+              value={selectedOption}
+              onChange={handleChange}
+              options={departmentActive}
+              styles={{
+                container: (provided, state) => ({
+                  ...provided,
+                  position: "relative",
+                }),
+                control: (provided, state) => ({
+                  ...provided,
+                  border: "1px solid blue",
+                  width: 200,
+                }),
+              }}
+            />
+          </label>
+        </div>
+        <div style={{ display: "flex", marginBottom: "30px" }}>
+          <label
+            style={{
+              marginRight: "20px",
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "20px",
+              height: "15px !important",
             }}
-          />
-        </label>
-        <button
-          onClick={sendData}
-          style={{ cursor: "pointer", marginRight: "10px" }}
-        >
-          Gonder
-        </button>
-        <button onClick={resetInput}>Sil</button>
+          >
+            <span>Vəzifə : </span>
+            <Select
+              isSearchable={false}
+              value={selectedPosition}
+              onChange={handleChangePsotion}
+              options={positionOptions}
+              styles={{
+                container: (provided, state) => ({
+                  ...provided,
+                  position: "relative",
+                }),
+                control: (provided, state) => ({
+                  ...provided,
+                  border: "1px solid blue",
+                  width: 200,
+                }),
+              }}
+            />
+          </label>
+
+          <label
+            style={{
+              marginRight: "20px",
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "20px",
+              height: "15px !important",
+            }}
+          >
+            <span>İstifadəçi : </span>
+            <Select
+              isSearchable={false}
+              value={selectedUser}
+              onChange={handleChangeUser}
+              options={userOptions}
+              styles={{
+                container: (provided, state) => ({
+                  ...provided,
+                  position: "relative",
+                }),
+                control: (provided, state) => ({
+                  ...provided,
+                  border: "1px solid blue",
+                  width: 200,
+                }),
+              }}
+            />
+          </label>
+          <button
+            onClick={sendData}
+            style={{
+              cursor: "pointer",
+              marginRight: "10px",
+              maxHeight: "37px",
+            }}
+          >
+            Gonder
+          </button>
+          <button
+            style={{
+              cursor: "pointer",
+              marginRight: "10px",
+              maxHeight: "37px",
+            }}
+            onClick={resetInput}
+          >
+            Sil
+          </button>
+        </div>
       </div>
 
       <Table>
@@ -216,15 +299,25 @@ export default function Employee() {
                   setSelectedOption({
                     ...selectedOption,
                     value: e.departmentId,
-                    label: e.departmentName,
+                    label: e.department,
+                  });
+                  setSelectedPosition({
+                    ...selectedPosition,
+                    value: e.positionId,
+                    label: e.position,
+                  });
+                  setSelectedUser({
+                    ...selectedUser,
+                    value: e.userId,
+                    label: e.userName,
                   });
                 }}
               >
                 <td>{e.name}</td>
                 <td>{e.surName}</td>
                 <td>{e.email}</td>
-                <td>{e.positionName}</td>
-                <td>{e.departmentName}</td>
+                <td>{e.position}</td>
+                <td>{e.department}</td>
                 <td>
                   <button
                     onClick={() => {
